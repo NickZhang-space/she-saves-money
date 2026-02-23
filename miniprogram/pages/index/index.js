@@ -1,7 +1,7 @@
 // pages/index/index.js
 const app = getApp();
-const { DreamAPI } = require('../../utils/api.js');
-const { showLoading, hideLoading, showError } = require('../../utils/util.js');
+const { DreamAPI, UserAPI } = require('../../utils/api.js');
+const { showLoading, hideLoading, showError, showSuccess } = require('../../utils/util.js');
 
 Page({
   data: {
@@ -10,17 +10,83 @@ Page({
     checkinDays: 0,
     dreams: [],
     loading: true,
-    isEmpty: false
+    isEmpty: false,
+    isLogin: false
   },
 
   onLoad() {
-    this.loadUserInfo();
-    this.loadDreams();
+    this.checkLogin();
   },
 
   onShow() {
     // 每次显示页面时刷新数据
-    this.loadDreams();
+    if (app.globalData.isLogin) {
+      this.loadUserInfo();
+      this.loadDreams();
+    }
+  },
+
+  // 检查登录状态
+  checkLogin() {
+    const openid = app.globalData.openid;
+    const userInfo = app.globalData.userInfo;
+    
+    if (openid && userInfo) {
+      this.setData({ isLogin: true });
+      this.loadUserInfo();
+      this.loadDreams();
+    } else {
+      this.setData({ 
+        isLogin: false,
+        loading: false 
+      });
+    }
+  },
+
+  // 登录
+  async login() {
+    try {
+      // 1. 调用 wx.login 获取 code
+      const loginRes = await wx.login();
+      const code = loginRes.code;
+
+      // 2. 调用云函数获取 openid
+      showLoading('登录中...');
+      const cloudRes = await wx.cloud.callFunction({
+        name: 'login',
+        data: { code }
+      });
+
+      const openid = cloudRes.result.openid;
+      app.globalData.openid = openid;
+      wx.setStorageSync('openid', openid);
+
+      // 3. 获取用户信息
+      const profileRes = await wx.getUserProfile({
+        desc: '用于完善会员资料'
+      });
+
+      const userInfo = profileRes.userInfo;
+      app.globalData.userInfo = userInfo;
+      app.globalData.isLogin = true;
+      wx.setStorageSync('userInfo', userInfo);
+
+      // 4. 保存用户信息到数据库
+      await UserAPI.updateUserInfo(openid, userInfo);
+
+      hideLoading();
+      showSuccess('登录成功');
+
+      // 5. 刷新页面
+      this.setData({ isLogin: true });
+      this.loadUserInfo();
+      this.loadDreams();
+
+    } catch (err) {
+      console.error('登录失败:', err);
+      hideLoading();
+      showError('登录失败，请重试');
+    }
   },
 
   // 加载用户信息
@@ -43,9 +109,9 @@ Page({
       
       if (!openid) {
         hideLoading();
-        wx.showToast({
-          title: '请先登录',
-          icon: 'none'
+        this.setData({
+          loading: false,
+          isEmpty: true
         });
         return;
       }
@@ -71,6 +137,10 @@ Page({
 
   // 跳转到创建梦想页
   goToCreate() {
+    if (!app.globalData.isLogin) {
+      showError('请先登录');
+      return;
+    }
     wx.navigateTo({
       url: '/pages/dream-create/dream-create'
     });

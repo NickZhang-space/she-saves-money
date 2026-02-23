@@ -1,40 +1,53 @@
 <!--pages/index/index.wxml-->
 <view class="container">
-  <!-- 顶部用户信息 -->
-  <view class="header">
-    <view class="user-info">
-      <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
-      <view class="user-detail">
-        <text class="nickname">{{userInfo.nickname || '追梦人'}}</text>
-        <view class="stats">
-          <text class="stat-item">💎 {{points}}分</text>
-          <text class="stat-item">🔥 连续{{checkinDays}}天</text>
-        </view>
-      </view>
+  <!-- 未登录状态 -->
+  <view class="login-container" wx:if="{{!isLogin}}">
+    <view class="login-card">
+      <view class="login-icon">✨</view>
+      <view class="login-title">欢迎来到她存钱</view>
+      <view class="login-desc">开启你的梦想之旅</view>
+      <button class="login-btn" bindtap="login">立即登录</button>
     </view>
   </view>
 
-  <!-- 梦想列表 -->
-  <view class="dream-list" wx:if="{{!isEmpty}}">
-    <view class="section-title">我的梦想</view>
-    <block wx:for="{{dreams}}" wx:key="id">
-      <dream-card 
-        dream="{{item}}"
-        bind:tap="goToDetail"
-        data-id="{{item._id}}"
-      />
-    </block>
-  </view>
+  <!-- 已登录状态 -->
+  <view wx:if="{{isLogin}}">
+    <!-- 顶部用户信息 -->
+    <view class="header">
+      <view class="user-info">
+        <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+        <view class="user-detail">
+          <text class="nickname">{{userInfo.nickName || '追梦人'}}</text>
+          <view class="stats">
+            <text class="stat-item">💎 {{points}}分</text>
+            <text class="stat-item">🔥 连续{{checkinDays}}天</text>
+          </view>
+        </view>
+      </view>
+    </view>
 
-  <!-- 空状态 -->
-  <view class="empty" wx:if="{{isEmpty && !loading}}">
-    <view class="empty-icon">✨</view>
-    <view class="empty-text">还没有梦想哦</view>
-    <view class="empty-desc">创建你的第一个梦想吧</view>
-  </view>
+    <!-- 梦想列表 -->
+    <view class="dream-list" wx:if="{{!isEmpty}}">
+      <view class="section-title">我的梦想</view>
+      <block wx:for="{{dreams}}" wx:key="id">
+        <dream-card 
+          dream="{{item}}"
+          bind:tap="goToDetail"
+          data-id="{{item._id}}"
+        />
+      </block>
+    </view>
 
-  <!-- 创建按钮 -->
-  <view class="create-btn" bindtap="goToCreate">
-    <text class="create-icon">+</text>
+    <!-- 空状态 -->
+    <view class="empty" wx:if="{{isEmpty && !loading}}">
+      <view class="empty-icon">✨</view>
+      <view class="empty-text">还没有梦想哦</view>
+      <view class="empty-desc">创建你的第一个梦想吧</view>
+    </view>
+
+    <!-- 创建按钮 -->
+    <view class="create-btn" bindtap="goToCreate">
+      <text class="create-icon">+</text>
+    </view>
   </view>
 </view>
