@@ -1,0 +1,60 @@
+/* components/progress-bar/progress-bar.wxss */
+.progress-bar-container {
+  width: 100%;
+  position: relative;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  background: #F0F0F0;
+  border-radius: 8rpx;
+  overflow: visible;
+  position: relative;
+}
+
+.progress-bar-fill {
+  background: linear-gradient(90deg, #FF69B4 0%, #FF1493 100%);
+  border-radius: 8rpx;
+  position: relative;
+}
+
+.progress-bar-fill.animated {
+  transition: width 0.8s ease-in-out;
+}
+
+/* 里程碑标记 */
+.milestone {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.milestone-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #E0E0E0;
+  border: 2rpx solid #FFFFFF;
+  margin-bottom: 8rpx;
+}
+
+.milestone.reached .milestone-dot {
+  background: #FF69B4;
+  box-shadow: 0 0 8rpx rgba(255, 105, 180, 0.5);
+}
+
+.milestone-text {
+  font-size: 20rpx;
+  color: #999;
+  white-space: nowrap;
+  position: absolute;
+  top: 30rpx;
+}
+
+.milestone.reached .milestone-text {
+  color: #FF69B4;
+  font-weight: 600;
+}

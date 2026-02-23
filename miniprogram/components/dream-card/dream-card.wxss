@@ -1,0 +1,107 @@
+/* components/dream-card/dream-card.wxss */
+.dream-card {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(255, 105, 180, 0.1);
+}
+
+/* 梦想图片 */
+.dream-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 300rpx;
+}
+
+.dream-image {
+  width: 100%;
+  height: 100%;
+}
+
+.category-badge {
+  position: absolute;
+  top: 20rpx;
+  left: 20rpx;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  color: #333;
+  backdrop-filter: blur(10rpx);
+}
+
+/* 梦想信息 */
+.dream-info {
+  padding: 30rpx;
+}
+
+.dream-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 进度条 */
+.progress-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.progress-bar-bg {
+  flex: 1;
+  height: 16rpx;
+  background: #F0F0F0;
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin-right: 15rpx;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF69B4 0%, #FF1493 100%);
+  border-radius: 8rpx;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #FF69B4;
+  min-width: 80rpx;
+  text-align: right;
+}
+
+/* 金额信息 */
+.amount-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.amount-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.amount-label {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+.amount-value {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.amount-value.primary {
+  color: #FF69B4;
+  font-size: 32rpx;
+}

@@ -1,0 +1,72 @@
+<!--pages/dream-create/dream-create.wxml-->
+<view class="container">
+  <view class="form">
+    <!-- 选择分类 -->
+    <view class="form-section">
+      <view class="section-title">选择梦想类型</view>
+      <view class="category-grid">
+        <view 
+          wx:for="{{categories}}" 
+          wx:key="id"
+          class="category-item {{selectedCategory === item.id ? 'active' : ''}}"
+          bindtap="selectCategory"
+          data-id="{{item.id}}"
+        >
+          <text class="category-icon">{{item.emoji}}</text>
+          <text class="category-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 梦想名称 -->
+    <view class="form-section">
+      <view class="section-title">梦想名称</view>
+      <input 
+        class="input" 
+        placeholder="例如：买个LV包包"
+        value="{{title}}"
+        bindinput="onTitleInput"
+        maxlength="30"
+      />
+    </view>
+
+    <!-- 目标金额 -->
+    <view class="form-section">
+      <view class="section-title">目标金额（元）</view>
+      <input 
+        class="input" 
+        type="digit"
+        placeholder="例如：10000"
+        value="{{targetAmount}}"
+        bindinput="onAmountInput"
+      />
+    </view>
+
+    <!-- 上传图片 -->
+    <view class="form-section">
+      <view class="section-title">梦想图片（可选）</view>
+      <view class="image-upload" bindtap="chooseImage">
+        <image wx:if="{{imageUrl}}" class="preview-image" src="{{imageUrl}}" mode="aspectFill"></image>
+        <view wx:else class="upload-placeholder">
+          <text class="upload-icon">{{uploading ? '上传中...' : '📷'}}</text>
+          <text class="upload-text">{{uploading ? '请稍候' : '点击上传图片'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 为什么想要 -->
+    <view class="form-section">
+      <view class="section-title">为什么想要这个梦想？（可选）</view>
+      <textarea 
+        class="textarea" 
+        placeholder="写下你的理由，让梦想更有动力..."
+        value="{{reason}}"
+        bindinput="onReasonInput"
+        maxlength="200"
+      />
+    </view>
+
+    <!-- 提交按钮 -->
+    <button class="btn btn-primary" bindtap="submit">创建梦想</button>
+  </view>
+</view>

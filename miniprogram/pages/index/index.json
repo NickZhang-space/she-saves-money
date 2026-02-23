@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "dream-card": "/components/dream-card/dream-card"
+  },
+  "navigationBarTitleText": "我的梦想",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#FFF0F5"
+}

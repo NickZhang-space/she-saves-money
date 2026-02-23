@@ -1,0 +1,8 @@
+<!--pages/friends/friends.wxml-->
+<view class="container">
+  <view class="empty">
+    <view class="empty-icon">👥</view>
+    <view class="empty-text">好友功能开发中</view>
+    <view class="empty-desc">敬请期待</view>
+  </view>
+</view>

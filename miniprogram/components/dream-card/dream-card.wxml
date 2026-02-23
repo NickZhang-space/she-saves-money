@@ -1,0 +1,33 @@
+<!--components/dream-card/dream-card.wxml-->
+<view class="dream-card" bindtap="onTap">
+  <!-- 梦想图片 -->
+  <view class="dream-image-wrapper">
+    <image class="dream-image" src="{{dream.image_url || '/images/default-dream.png'}}" mode="aspectFill"></image>
+    <view class="category-badge">{{categoryIcon}} {{dream.category_name || '梦想'}}</view>
+  </view>
+
+  <!-- 梦想信息 -->
+  <view class="dream-info">
+    <view class="dream-title">{{dream.title}}</view>
+    
+    <!-- 进度条 -->
+    <view class="progress-section">
+      <view class="progress-bar-bg">
+        <view class="progress-bar-fill" style="width: {{progress}}%"></view>
+      </view>
+      <text class="progress-text">{{progress}}%</text>
+    </view>
+
+    <!-- 金额信息 -->
+    <view class="amount-info">
+      <view class="amount-item">
+        <text class="amount-label">已存</text>
+        <text class="amount-value primary">{{currentAmount}}</text>
+      </view>
+      <view class="amount-item">
+        <text class="amount-label">目标</text>
+        <text class="amount-value">{{targetAmount}}</text>
+      </view>
+    </view>
+  </view>
+</view>

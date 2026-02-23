@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "progress-bar": "/components/progress-bar/progress-bar"
+  },
+  "navigationBarTitleText": "梦想详情",
+  "backgroundColor": "#FFF0F5"
+}

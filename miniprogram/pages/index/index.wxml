@@ -1,186 +1,40 @@
 <!--pages/index/index.wxml-->
 <view class="container">
-  <!-- 登录提示弹窗 -->
-  <view wx:if="{{showLoginModal}}" class="login-modal">
-    <view class="modal-content">
-      <view class="modal-header">
-        <text class="modal-title">欢迎来到美丽省钱罐</text>
-        <text class="modal-close" bindtap="closeLoginModal">×</text>
-      </view>
-      <view class="modal-body">
-        <image src="/images/logo.png" class="modal-logo"></image>
-        <text class="modal-desc">每次忍住不买，都是离梦想更近一步</text>
-        <text class="modal-tip">登录后开始记录你的省钱之旅</text>
-      </view>
-      <view class="modal-footer">
-        <button class="btn btn-primary" bindtap="handleLogin">微信一键登录</button>
+  <!-- 顶部用户信息 -->
+  <view class="header">
+    <view class="user-info">
+      <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <view class="user-detail">
+        <text class="nickname">{{userInfo.nickname || '追梦人'}}</text>
+        <view class="stats">
+          <text class="stat-item">💎 {{points}}分</text>
+          <text class="stat-item">🔥 连续{{checkinDays}}天</text>
+        </view>
       </view>
     </view>
   </view>
 
-  <!-- 加载状态 -->
-  <view wx:if="{{loading}}" class="loading-container">
-    <view class="loading-spinner"></view>
-    <text>加载中...</text>
+  <!-- 梦想列表 -->
+  <view class="dream-list" wx:if="{{!isEmpty}}">
+    <view class="section-title">我的梦想</view>
+    <block wx:for="{{dreams}}" wx:key="id">
+      <dream-card 
+        dream="{{item}}"
+        bind:tap="goToDetail"
+        data-id="{{item._id}}"
+      />
+    </block>
   </view>
 
-  <!-- 已登录内容 -->
-  <view wx:else>
-    <!-- 用户信息 -->
-    <view class="user-info card">
-      <view class="flex align-center">
-        <image src="{{userInfo.avatarUrl || '/images/avatar-default.png'}}" class="avatar"></image>
-        <view class="user-details ml-32">
-          <text class="user-name fs-20 fw-600">{{userInfo.nickName || '美丽省钱家'}}</text>
-          <text class="user-welcome text-light">今天又为梦想省了多少钱？</text>
-        </view>
-      </view>
-    </view>
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{isEmpty && !loading}}">
+    <view class="empty-icon">✨</view>
+    <view class="empty-text">还没有梦想哦</view>
+    <view class="empty-desc">创建你的第一个梦想吧</view>
+  </view>
 
-    <!-- 统计卡片 -->
-    <view class="stats-container">
-      <view class="stat-card card">
-        <text class="stat-label">总共节省</text>
-        <text class="stat-value text-primary fs-32 fw-700">¥{{totalSaved.toFixed(2)}}</text>
-        <text class="stat-desc">离梦想更近一步</text>
-      </view>
-      
-      <view class="stat-grid">
-        <view class="stat-item">
-          <text class="stat-item-label">今日</text>
-          <text class="stat-item-value">¥{{todaySaved}}</text>
-        </view>
-        <view class="stat-item">
-          <text class="stat-item-label">本周</text>
-          <text class="stat-item-value">¥{{weekSaved}}</text>
-        </view>
-        <view class="stat-item">
-          <text class="stat-item-label">本月</text>
-          <text class="stat-item-value">¥{{monthSaved}}</text>
-        </view>
-      </view>
-    </view>
-
-    <!-- 快速记录 -->
-    <view class="quick-record card">
-      <view class="section-header">
-        <text class="section-title fs-20 fw-600">快速记录</text>
-        <text class="section-subtitle text-light">点击记录省钱瞬间</text>
-      </view>
-      
-      <view class="quick-buttons">
-        <button class="quick-btn" data-type="coffee" bindtap="quickRecord">
-          <image src="/images/icon-coffee.png" class="quick-icon"></image>
-          <text class="quick-label">没喝奶茶</text>
-          <text class="quick-amount">¥25</text>
-        </button>
-        
-        <button class="quick-btn" data-type="lunch" bindtap="quickRecord">
-          <image src="/images/icon-lunch.png" class="quick-icon"></image>
-          <text class="quick-label">自带午饭</text>
-          <text class="quick-amount">¥30</text>
-        </button>
-        
-        <button class="quick-btn" data-type="transport" bindtap="quickRecord">
-          <image src="/images/icon-transport.png" class="quick-icon"></image>
-          <text class="quick-label">步行上班</text>
-          <text class="quick-amount">¥15</text>
-        </button>
-        
-        <button class="quick-btn" data-type="shopping" bindtap="quickRecord">
-          <image src="/images/icon-shopping.png" class="quick-icon"></image>
-          <text class="quick-label">忍住没买</text>
-          <text class="quick-amount">¥50</text>
-        </button>
-      </view>
-      
-      <view class="more-record">
-        <button class="btn btn-outline" bindtap="goToRecord">更多记录方式</button>
-      </view>
-    </view>
-
-    <!-- 我的梦想 -->
-    <view class="my-dreams card">
-      <view class="section-header flex-between align-center">
-        <view>
-          <text class="section-title fs-20 fw-600">我的梦想</text>
-          <text class="section-subtitle text-light">共{{totalDreams}}个梦想</text>
-        </view>
-        <button class="btn btn-secondary" bindtap="goToDream">管理梦想</button>
-      </view>
-      
-      <view wx:if="{{activeDreams.length === 0}}" class="empty-dreams">
-        <image src="/images/empty-dream.png" class="empty-image"></image>
-        <text class="empty-text">还没有创建梦想</text>
-        <button class="btn btn-primary" bindtap="goToDream">创建第一个梦想</button>
-      </view>
-      
-      <view wx:else class="dreams-list">
-        <view wx:for="{{activeDreams}}" wx:key="id" class="dream-item">
-          <view class="dream-header">
-            <view class="dream-info">
-              <text class="dream-name fs-18 fw-600">{{item.name}}</text>
-              <text class="dream-amount text-light">¥{{item.current}} / ¥{{item.target}}</text>
-            </view>
-            <text class="dream-progress">{{item.progress}}%</text>
-          </view>
-          
-          <view class="progress-bar mt-16">
-            <view class="progress-inner" style="width: {{item.progress}}%; background: {{item.color}};"></view>
-          </view>
-          
-          <view class="dream-footer mt-16">
-            <text class="dream-tip">还差¥{{item.target - item.current}}就能实现</text>
-          </view>
-        </view>
-      </view>
-    </view>
-
-    <!-- 最近记录 -->
-    <view class="recent-records card">
-      <view class="section-header flex-between align-center">
-        <view>
-          <text class="section-title fs-20 fw-600">最近记录</text>
-          <text class="section-subtitle text-light">你的省钱时刻</text>
-        </view>
-        <button class="btn btn-outline" bindtap="goToRecord">查看全部</button>
-      </view>
-      
-      <view wx:if="{{recentRecords.length === 0}}" class="empty-records">
-        <image src="/images/empty-record.png" class="empty-image"></image>
-        <text class="empty-text">还没有省钱记录</text>
-        <text class="empty-tip text-light">点击上方按钮开始记录</text>
-      </view>
-      
-      <view wx:else class="records-list">
-        <view wx:for="{{recentRecords}}" wx:key="id" class="record-item">
-          <view class="record-icon">
-            <image src="/images/icon-save.png" class="icon"></image>
-          </view>
-          <view class="record-details">
-            <view class="record-header">
-              <text class="record-description fs-16 fw-500">{{item.description}}</text>
-              <text class="record-amount text-primary fs-18 fw-600">+¥{{item.amount}}</text>
-            </view>
-            <view class="record-footer">
-              <text class="record-time text-light">{{item.time}}</text>
-              <text class="record-dream text-lighter">→ {{item.dreamName}}</text>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-
-    <!-- 社交入口 -->
-    <view class="social-entry card">
-      <view class="social-content">
-        <image src="/images/icon-friends.png" class="social-icon"></image>
-        <view class="social-info">
-          <text class="social-title fs-18 fw-600">和闺蜜一起省钱</text>
-          <text class="social-desc text-light">组队挑战，互相监督，省钱更有动力</text>
-        </view>
-        <button class="btn btn-primary" bindtap="goToSocial">立即加入</button>
-      </view>
-    </view>
+  <!-- 创建按钮 -->
+  <view class="create-btn" bindtap="goToCreate">
+    <text class="create-icon">+</text>
   </view>
 </view>

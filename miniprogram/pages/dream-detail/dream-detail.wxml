@@ -1,0 +1,77 @@
+<!--pages/dream-detail/dream-detail.wxml-->
+<view class="container">
+  <!-- 梦想图片 -->
+  <view class="dream-header">
+    <image class="dream-image" src="{{dream.image_url || '/images/default-dream.png'}}" mode="aspectFill"></image>
+    <view class="header-overlay">
+      <text class="dream-title">{{dream.title}}</text>
+    </view>
+  </view>
+
+  <!-- AI 消息 -->
+  <view class="ai-message-section">
+    <view class="ai-avatar">🤖</view>
+    <view class="ai-bubble">
+      <text class="ai-text">{{aiMessage}}</text>
+    </view>
+  </view>
+
+  <!-- 进度信息 -->
+  <view class="progress-section card">
+    <view class="progress-header">
+      <text class="progress-percent">{{progress}}%</text>
+      <text class="progress-status">{{progress >= 100 ? '已完成' : '进行中'}}</text>
+    </view>
+    
+    <progress-bar progress="{{progress}}" animated="{{true}}" showMilestone="{{true}}" height="{{20}}" />
+    
+    <view class="amount-detail">
+      <view class="amount-row">
+        <text class="label">已存金额</text>
+        <text class="value primary">{{currentAmount}}</text>
+      </view>
+      <view class="amount-row">
+        <text class="label">目标金额</text>
+        <text class="value">{{targetAmount}}</text>
+      </view>
+      <view class="amount-row">
+        <text class="label">还需</text>
+        <text class="value">{{remainingAmount}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 梦想原因 -->
+  <view class="reason-section card" wx:if="{{dream.reason}}">
+    <view class="section-title">💭 为什么想要</view>
+    <text class="reason-text">{{dream.reason}}</text>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <button class="btn btn-primary" bindtap="showUpdate" wx:if="{{progress < 100}}">更新进度</button>
+    <button class="btn btn-primary" bindtap="completeDream" wx:if="{{progress >= 100}}">标记完成</button>
+    <button class="btn btn-secondary" bindtap="sharePoster">生成海报</button>
+  </view>
+
+  <!-- 更新进度弹窗 -->
+  <view class="modal" wx:if="{{showUpdateModal}}" catchtap="hideUpdate">
+    <view class="modal-content" catchtap="">
+      <view class="modal-title">更新进度</view>
+      <view class="modal-body">
+        <text class="modal-label">本次存入金额（元）</text>
+        <input 
+          class="modal-input" 
+          type="digit"
+          placeholder="请输入金额"
+          value="{{updateAmount}}"
+          bindinput="onUpdateAmountInput"
+        />
+      </view>
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="hideUpdate">取消</button>
+        <button class="modal-btn confirm" bindtap="submitUpdate">确定</button>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,81 @@
+<!--pages/profile/profile.wxml-->
+<view class="container">
+  <!-- 用户信息 -->
+  <view class="user-section">
+    <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+    <view class="user-info">
+      <text class="nickname">{{userInfo.nickname || '追梦人'}}</text>
+      <view class="invite-code" bindtap="copyInviteCode">
+        <text class="code-label">邀请码：</text>
+        <text class="code-value">{{inviteCode}}</text>
+        <text class="code-copy">📋</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 数据统计 -->
+  <view class="stats-grid">
+    <view class="stat-item">
+      <text class="stat-number">{{points}}</text>
+      <text class="stat-label">梦想分</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-number">{{checkinDays}}</text>
+      <text class="stat-label">连续打卡</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-number">{{dreamCount}}</text>
+      <text class="stat-label">梦想数</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-number">{{invitedCount}}</text>
+      <text class="stat-label">邀请好友</text>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-section card">
+    <view class="menu-item" bindtap="goToFriends">
+      <view class="menu-left">
+        <text class="menu-icon">👥</text>
+        <text class="menu-text">我的好友</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+    
+    <view class="menu-item" bindtap="goToLeaderboard">
+      <view class="menu-left">
+        <text class="menu-icon">🏆</text>
+        <text class="menu-text">排行榜</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+    
+    <view class="menu-item" bindtap="goToShop">
+      <view class="menu-left">
+        <text class="menu-icon">🛍️</text>
+        <text class="menu-text">梦想分商城</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 设置菜单 -->
+  <view class="menu-section card">
+    <view class="menu-item" bindtap="showAbout">
+      <view class="menu-left">
+        <text class="menu-icon">ℹ️</text>
+        <text class="menu-text">关于我们</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+    
+    <view class="menu-item" bindtap="contactService">
+      <view class="menu-left">
+        <text class="menu-icon">💬</text>
+        <text class="menu-text">联系客服</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+</view>

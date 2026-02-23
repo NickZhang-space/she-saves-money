@@ -1,0 +1,22 @@
+<!--components/progress-bar/progress-bar.wxml-->
+<view class="progress-bar-container">
+  <view class="progress-bar-bg" style="height: {{height}}rpx">
+    <view 
+      class="progress-bar-fill {{animated ? 'animated' : ''}}" 
+      style="width: {{progress}}%; height: {{height}}rpx"
+    ></view>
+    
+    <!-- 里程碑标记 -->
+    <block wx:if="{{showMilestone}}">
+      <view 
+        wx:for="{{milestones}}" 
+        wx:key="*this"
+        class="milestone {{isMilestoneReached(item) ? 'reached' : ''}}"
+        style="left: {{item}}%"
+      >
+        <view class="milestone-dot"></view>
+        <text class="milestone-text">{{item}}%</text>
+      </view>
+    </block>
+  </view>
+</view>
