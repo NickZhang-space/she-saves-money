@@ -1,0 +1,9 @@
+{
+  "name": "dreamPoints",
+  "version": "1.0.0",
+  "description": "梦想分计算云函数",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}
