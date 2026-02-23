@@ -4,7 +4,7 @@ App({
     // 初始化云开发
     if (wx.cloud) {
       wx.cloud.init({
-        env: 'cloud1-9gvj1jvz9f8d3f6f', // 云开发环境ID
+        env: 'cloudbase-1g5gu0003011e0', // 云开发环境ID
         traceUser: true,
       })
     }
