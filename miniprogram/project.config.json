@@ -1,5 +1,6 @@
 {
   "description": "她存钱 - 女性梦想目标管理小程序",
+  "cloudfunctionRoot": "cloudfunctions/",
   "packOptions": {
     "ignore": []
   },
